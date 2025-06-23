@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .text {
+      font: bold 48px sans-serif;
+      fill: #0ef;
+      text-shadow: 0 0 6px #0ef;
+    }
+  </style>
+  <text x="10" y="48" class="text">S</text>
+</svg>
