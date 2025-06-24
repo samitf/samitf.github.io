@@ -6,6 +6,7 @@ This is a **personal portfolio website** built using **vanilla HTML, CSS, and Ja
 
 The project is **still in progress**.  
 I'm actively working on enhancing sections, animations, responsiveness, and interactivity. Feel free to explore the current version and check back later for updates!
+Currently, the site is **not responsive!!**
 
 ## Built With
 
