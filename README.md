@@ -1,6 +1,6 @@
 # My Portfolio Website
 
-This is a **personal portfolio website** built using **vanilla HTML, CSS, and JavaScript**
+This is a **personal portfolio website** built using **HTML, CSS, and vanilla JavaScript**
 
 ## Status
 
