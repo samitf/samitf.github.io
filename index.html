@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Samit Fernandes | Portfolio</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;500&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+
+<!-- Header -->
+<header class="flex justify-between items-center px-6 py-4 md:px-10 border-b sticky top-0 bg-white z-50 border-gray-200">
+  <h1 class="text-2xl font-semibold tracking-wider uppercase">Samit</h1>
+  <div class="flex items-center space-x-4 md:space-x-6 text-sm uppercase tracking-wide text-gray-600">
+    <a href="#about" class="hover:text-black">About</a>
+    <a href="#skills" class="hover:text-black">Skills</a>
+    <a href="#projects" class="hover:text-black">Projects</a>
+    <a href="#contact" class="hover:text-black">Contact</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="min-h-screen flex flex-col justify-center items-center text-center px-6 bg-gray-50">
+  <h1 class="text-5xl md:text-9xl font-light tracking-tight">Samit Fernandes</h1>
+  <h2 class="text-5xl md:text-7xl font-light tracking-tight">Software Developer</h2>
+  <p class="mt-6 text-gray-600 max-w-xl text-lg leading-relaxed italic">Building clean, scalable, and human-centered digital solutions.</p>
+</section>
+
+<!-- About -->
+<section id="about" class="min-h-screen bg-white flex items-center justify-center px-6 text-center" data-aos="fade-up">
+  <div>
+    <img src="assets/profile.png" alt="Profile"
+        class="w-32 h-32 mx-auto rounded-full mb-6 grayscale hover:grayscale-0 transition duration-300" data-aos="zoom-in">
+
+    <h2 class="text-3xl font-semibold mb-2">About Me</h2>
+    <p class="text-gray-500 mb-4 text-sm tracking-wide uppercase">Developer • Coder • Enthusiast</p>
+
+    <p class="text-base md:text-lg max-w-2xl mx-auto text-gray-700">
+      I'm Samit, a passionate full-stack software developer crafting digital experiences using modern web technologies. I believe in elegant, maintainable code and user-first design.
+    </p>
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="skills" class="min-h-screen bg-gray-50 flex items-center justify-center px-6 text-center" data-aos="fade-up">
+  <div>
+    <h3 class="text-3xl font-semibold mb-12">Skills</h3>
+    <div class="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+
+      <div class="space-y-2 hover:scale-105 transition-transform duration-300" data-aos="fade-up" data-aos-delay="100">
+        <i class="fas fa-code text-3xl text-gray-500"></i>
+        <h4 class="text-lg font-semibold">Frontend</h4>
+        <p class="text-gray-600 text-sm">HTML, CSS, JavaScript, React, Tailwind CSS</p>
+      </div>
+      <div class="space-y-2 hover:scale-105 transition-transform duration-300" data-aos="fade-up" data-aos-delay="150">
+        <i class="fas fa-server text-3xl text-gray-500"></i>
+        <h4 class="text-lg font-semibold">Backend</h4>
+        <p class="text-gray-600 text-sm">Node.js, Python, Flask, REST APIs</p>
+      </div>
+      <div class="space-y-2 hover:scale-105 transition-transform duration-300" data-aos="fade-up" data-aos-delay="200">
+        <i class="fas fa-tools text-3xl text-gray-500"></i>
+        <h4 class="text-lg font-semibold">Tools</h4>
+        <p class="text-gray-600 text-sm">n8n, Hugging Face, VS Code</p>
+      </div>
+      <div class="space-y-2 hover:scale-105 transition-transform duration-300" data-aos="fade-up" data-aos-delay="250">
+        <i class="fas fa-database text-3xl text-gray-500"></i>
+        <h4 class="text-lg font-semibold">Database</h4>
+        <p class="text-gray-600 text-sm">MongoDB, MySQL</p>
+      </div>
+      <div class="space-y-2 hover:scale-105 transition-transform duration-300" data-aos="fade-up" data-aos-delay="300">
+        <i class="fas fa-brain text-3xl text-gray-500"></i>
+        <h4 class="text-lg font-semibold">ML</h4>
+        <p class="text-gray-600 text-sm">Pandas, Numpy, Scikit Learn, Seaborn</p>
+      </div>
+      <div class="space-y-2 hover:scale-105 transition-transform duration-300" data-aos="fade-up" data-aos-delay="350">
+        <i class="fas fa-paint-brush text-3xl text-gray-500"></i>
+        <h4 class="text-lg font-semibold">Design</h4>
+        <p class="text-gray-600 text-sm">Photoshop, After Effects, Canva, Midjourney</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section id="projects" class="min-h-screen py-24 px-6 bg-white border-t border-gray-100 text-center">
+  <h3 class="text-3xl font-semibold mb-16">Projects</h3>
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-6xl mx-auto">
+
+    <div class="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition transform hover:-translate-y-1 group" data-aos="fade-up" data-aos-delay="100">
+      <div class="relative">
+        <img src="./assets/project/project1.png" alt="BabyLLM"
+             class="w-full h-56 object-cover group-hover:opacity-80 transition duration-300">
+        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-center items-center text-white p-4">
+          <h4 class="text-lg font-semibold mb-2">BabyLLM</h4>
+          <p class="text-sm mb-4 text-center">An NLP agent which learns through user teachings</p>
+          <div class="flex gap-3">
+            <a href="#" class="px-3 py-1 text-xs bg-white text-black rounded hover:bg-gray-100">Live</a>
+            <a href="#" class="px-3 py-1 text-xs border border-white rounded hover:bg-white hover:text-black">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition transform hover:-translate-y-1 group" data-aos="fade-up" data-aos-delay="150">
+      <div class="relative">
+        <img src="./assets/project/project2.png" alt="ResumAI"
+             class="w-full h-56 object-cover group-hover:opacity-80 transition duration-300">
+        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-center items-center text-white p-4">
+          <h4 class="text-lg font-semibold mb-2">ResumAI</h4>
+          <p class="text-sm mb-4 text-center">A resume assistant powered by the strength of AI</p>
+          <div class="flex gap-3">
+            <a href="#" class="px-3 py-1 text-xs bg-white text-black rounded hover:bg-gray-100">Live</a>
+            <a href="#" class="px-3 py-1 text-xs border border-white rounded hover:bg-white hover:text-black">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition transform hover:-translate-y-1 group" data-aos="fade-up" data-aos-delay="200">
+      <div class="relative">
+        <img src="./assets/project/project3.png" alt="NyayaAnalyzer"
+             class="w-full h-56 object-cover group-hover:opacity-80 transition duration-300">
+        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-center items-center text-white p-4">
+          <h4 class="text-lg font-semibold mb-2">Nyaya Analyzer</h4>
+          <p class="text-sm mb-4 text-center">A powerful legal document analyzer for your complex documents</p>
+          <div class="flex gap-3">
+            <a href="#" class="px-3 py-1 text-xs bg-white text-black rounded hover:bg-gray-100">Live</a>
+            <a href="#" class="px-3 py-1 text-xs border border-white rounded hover:bg-white hover:text-black">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition transform hover:-translate-y-1 group" data-aos="fade-up" data-aos-delay="250">
+      <div class="relative">
+        <img src="./assets/project/project4.png" alt="Sentimentor"
+             class="w-full h-56 object-cover group-hover:opacity-80 transition duration-300">
+        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-center items-center text-white p-4">
+          <h4 class="text-lg font-semibold mb-2">Sentimentor</h4>
+          <p class="text-sm mb-4 text-center">A sentiment analysis tool for various regional languages</p>
+          <div class="flex gap-3">
+            <a href="#" class="px-3 py-1 text-xs bg-white text-black rounded hover:bg-gray-100">Live</a>
+            <a href="#" class="px-3 py-1 text-xs border border-white rounded hover:bg-white hover:text-black">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition transform hover:-translate-y-1 group" data-aos="fade-up" data-aos-delay="300">
+      <div class="relative">
+        <img src="./assets/project/project5.png" alt="NextView"
+             class="w-full h-56 object-cover group-hover:opacity-80 transition duration-300">
+        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-center items-center text-white p-4">
+          <h4 class="text-lg font-semibold mb-2">NextView</h4>
+          <p class="text-sm mb-4 text-center">A recommendation system that suggests your next movie/web series</p>
+          <div class="flex gap-3">
+            <a href="#" class="px-3 py-1 text-xs bg-white text-black rounded hover:bg-gray-100">Live</a>
+            <a href="#" class="px-3 py-1 text-xs border border-white rounded hover:bg-white hover:text-black">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition transform hover:-translate-y-1 group" data-aos="fade-up" data-aos-delay="350">
+      <div class="relative">
+        <img src="./assets/project/project6.png" alt="SalesMate"
+             class="w-full h-56 object-cover group-hover:opacity-80 transition duration-300">
+        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-center items-center text-white p-4">
+          <h4 class="text-lg font-semibold mb-2">SalesMate</h4>
+          <p class="text-sm mb-4 text-center">A system that predicts your future sales and much more..</p>
+          <div class="flex gap-3">
+            <a href="#" class="px-3 py-1 text-xs bg-white text-black rounded hover:bg-gray-100">Live</a>
+            <a href="#" class="px-3 py-1 text-xs border border-white rounded hover:bg-white hover:text-black">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="min-h-screen bg-gray-50 flex items-center justify-center px-6 text-center" data-aos="fade-up">
+  <div>
+    <h3 class="text-3xl font-semibold mb-6">Contact</h3>
+    <p class="text-gray-600 text-base md:text-lg">Say hello at 
+      <a href="mailto:samitfernandes019@gmail.com" class="underline hover:text-black">samitfernandes019@gmail.com</a>
+    </p>
+    <div class="mt-6 flex justify-center gap-6 text-gray-600 text-xl">
+      <a href="https://github.com/samitf/" target="_blank" aria-label="GitHub" class="hover:text-gray-800 transition">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="www.linkedin.com/in/samitf" target="_blank" aria-label="LinkedIn" class="hover:text-gray-800 transition">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </div>
+    <a href="assets/resume.pdf" download class="inline-block mt-8 px-6 py-2 border border-gray-800 text-gray-800 font-medium rounded hover:bg-gray-800 hover:text-white transition">
+      Download Resume
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center py-6 text-sm text-gray-400 border-t border-gray-100">
+  Samit Fernandes | Portfolio
+</footer>
+
+<!-- Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 800, once: true });
+</script>
+</body>
+</html>
