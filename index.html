@@ -14,6 +14,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         crossorigin="anonymous" referrerpolicy="no-referrer">
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -34,28 +35,51 @@
             scroll-behavior: smooth;
         }
 
-        /* Clean underline animation for links */
-        .hover-underline {
-            position: relative;
-            text-decoration: none;
+        @media (min-width: 768px) {
+            .hover-underline {
+                position: relative;
+                text-decoration: none;
+            }
+
+            .hover-underline::after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                transform: scaleX(0);
+                height: 1px;
+                bottom: 0;
+                left: 0;
+                background-color: currentColor;
+                transform-origin: bottom right;
+                transition: transform 0.25s ease-out;
+            }
+
+            .hover-underline:hover::after {
+                transform: scaleX(1);
+                transform-origin: bottom left;
+            }
         }
 
-        .hover-underline::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            transform: scaleX(0);
-            height: 1px;
-            bottom: 0;
-            left: 0;
-            background-color: currentColor;
-            transform-origin: bottom right;
-            transition: transform 0.25s ease-out;
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
 
-        .hover-underline:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .group\/card.is-active .grid-expand {
+            grid-template-rows: 1fr;
+        }
+
+        .group\/card.is-active .opacity-expand {
+            opacity: 1;
+        }
+
+        .group\/card.is-active i.fa-arrow-right {
+            opacity: 1;
+            transform: translateX(0);
         }
     </style>
 </head>
@@ -63,45 +87,80 @@
 <body class="antialiased selection:bg-gray-300 selection:text-black">
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-[#fafafa]/90 backdrop-blur-sm z-50 border-b border-gray-200">
-        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#">
+    <nav class="fixed top-0 w-full bg-[#fafafa]/90 backdrop-blur-md z-50 border-b border-gray-200">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center relative">
+            <a href="#" class="z-50">
                 <img src="assets/profile.png" alt="Profile"
+                    onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80'"
                     class="h-9 w-9 rounded-full grayscale hover:grayscale-0 transition duration-500 border border-gray-300 object-cover">
             </a>
-            <div class="flex space-x-4 md:space-x-6 text-xs md:text-sm text-gray-500 font-medium tracking-wide">
-                <a href="#narrative" class="hover:text-gray-900 transition-colors">Narrative</a>
-                <a href="#foundations" class="hover:text-gray-900 transition-colors">Foundations</a>
-                <a href="#research" class="hover:text-gray-900 transition-colors">Research &amp; Engineering</a>
-                <a href="#knowledge-hub" class="hover:text-gray-900 transition-colors">Knowledge Hub</a>
+
+            <div class="hidden md:flex space-x-6 text-sm text-gray-500 font-medium tracking-wide">
+                <a href="#narrative" class="hover-underline hover:text-gray-900 transition-colors">Narrative</a>
+                <a href="#foundations" class="hover-underline hover:text-gray-900 transition-colors">Foundations</a>
+                <a href="#research" class="hover-underline hover:text-gray-900 transition-colors">Research &amp;
+                    Engineering</a>
+                <a href="#knowledge-hub" class="hover-underline hover:text-gray-900 transition-colors">Knowledge Hub</a>
+            </div>
+
+            <button id="menu-btn"
+                class="md:hidden z-50 p-2 text-gray-500 hover:text-gray-900 focus:outline-none transition-colors"
+                aria-label="Toggle Menu">
+                <svg id="hamburger-icon" class="h-6 w-6 transition-transform duration-300" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg id="close-icon" class="h-6 w-6 hidden transition-transform duration-300" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div id="mobile-menu"
+                class="absolute top-full left-4 right-4 bg-white/95 backdrop-blur-md rounded-2xl border border-gray-200/80 p-6 shadow-[0_20px_50px_rgba(0,0,0,0.08)] flex flex-col space-y-4 text-base font-serif text-gray-800 transition-all duration-300 origin-top opacity-0 scale-95 pointer-events-none md:hidden z-40">
+                <a href="#narrative" onclick="toggleMenu(false)"
+                    class="hover:text-black transition-colors py-1 block border-b border-gray-50">The Narrative</a>
+                <a href="#foundations" onclick="toggleMenu(false)"
+                    class="hover:text-black transition-colors py-1 block border-b border-gray-50">Technical
+                    Foundations</a>
+                <a href="#research" onclick="toggleMenu(false)"
+                    class="hover:text-black transition-colors py-1 block border-b border-gray-50">Research &amp;
+                    Engineering</a>
+                <a href="#knowledge-hub" onclick="toggleMenu(false)"
+                    class="hover:text-black transition-colors py-1 block">Knowledge Hub</a>
             </div>
         </div>
     </nav>
 
-    <!-- Main Container -->
-    <main class="max-w-4xl mx-auto px-6 pt-32 pb-24">
+    <div id="menu-backdrop" onclick="toggleMenu(false)"
+        class="fixed inset-0 h-screen w-screen bg-black/5 backdrop-blur-[2px] transition-opacity duration-300 opacity-0 pointer-events-none z-30 md:hidden">
+    </div>
 
-        <!-- Header / Hero -->
-        <header class="mb-24">
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-6 pt-24 md:pt-36 pb-24 overflow-x-hidden">
+
+        <!-- Header (Hero) -->
+        <header class="mb-20 md:mb-28">
             <h1 class="text-4xl md:text-5xl font-semibold mb-4 tracking-tight">Samit Fernandes</h1>
-            <h2 class="text-xl md:text-2xl text-gray-500 font-serif italic mb-8 max-w-2xl leading-relaxed">
+            <h2 class="text-lg md:text-2xl text-gray-500 font-serif italic mb-8 max-w-2xl leading-relaxed">
                 Building software that reasons with data and communicates through language.
             </h2>
-            <div class="flex gap-4 text-sm font-medium">
+            <div class="flex flex-wrap gap-3 text-xs md:text-sm font-medium">
                 <a href="mailto:samitfernandes019@gmail.com"
-                    class="border border-gray-300 px-4 py-2 rounded hover:bg-gray-900 hover:text-white transition-colors">Email
+                    class="border border-gray-300 px-4 py-2.5 rounded-xl hover:bg-gray-900 hover:text-white transition-all duration-300">Email
                     Me</a>
                 <a href="assets/resume.pdf" download=""
-                    class="border border-gray-300 px-4 py-2 rounded hover:bg-gray-900 hover:text-white transition-colors">Curriculum
+                    class="border border-gray-300 px-4 py-2.5 rounded-xl hover:bg-gray-900 hover:text-white transition-all duration-300">Curriculum
                     Vitae</a>
             </div>
         </header>
 
         <!-- Narrative (About) -->
-        <section id="narrative" class="mb-24">
+        <section id="narrative" class="mb-24 scroll-mt-24">
             <div class="w-8 h-[1.5px] bg-black mb-6"></div>
             <h3 class="text-xs font-semibold tracking-widest uppercase text-gray-400 mb-6">The Narrative</h3>
-            <div class="prose prose-lg text-gray-700 font-light leading-relaxed max-w-none text-justify">
+            <div class="prose prose-base md:prose-lg text-gray-700 font-light leading-relaxed max-w-none text-justify">
                 <p class="mb-4">
                     I believe the future of software lies beyond forms and dashboards, where conversations become the
                     primary way people interact with intelligent systems. My work focuses on integrating AI into
@@ -119,13 +178,15 @@
         </section>
 
         <!-- Technical Foundations (Skills) -->
-        <section id="foundations" class="mb-24">
+        <section id="foundations" class="mb-24 scroll-mt-24">
             <div class="w-8 h-[1.5px] bg-black mb-6"></div>
             <h3 class="text-xs font-semibold tracking-widest uppercase text-gray-400 mb-8">Technical Foundations</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 py-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 py-4">
                 <div>
-                    <h4 class="font-serif text-lg text-gray-900 mb-4">Programming</h4>
-                    <ul class="text-gray-600 space-y-2 font-light">
+                    <h4
+                        class="font-serif text-lg text-gray-900 mb-3 md:mb-4 border-b border-gray-100 pb-2 md:border-none">
+                        Programming</h4>
+                    <ul class="text-gray-600 space-y-2 font-light text-sm">
                         <li>Python</li>
                         <li>JavaScript</li>
                         <li>SQL</li>
@@ -134,8 +195,10 @@
                 </div>
 
                 <div>
-                    <h4 class="font-serif text-lg text-gray-900 mb-4">Language Intelligence</h4>
-                    <ul class="text-gray-600 space-y-2 font-light">
+                    <h4
+                        class="font-serif text-lg text-gray-900 mb-3 md:mb-4 border-b border-gray-100 pb-2 md:border-none">
+                        Language Intelligence</h4>
+                    <ul class="text-gray-600 space-y-2 font-light text-sm">
                         <li>Tokenization &amp; Embeddings</li>
                         <li>Attention Mechanisms</li>
                         <li>Representation Learning</li>
@@ -146,8 +209,10 @@
                 </div>
 
                 <div>
-                    <h4 class="font-serif text-lg text-gray-900 mb-4">Systems &amp; Data</h4>
-                    <ul class="text-gray-600 space-y-2 font-light">
+                    <h4
+                        class="font-serif text-lg text-gray-900 mb-3 md:mb-4 border-b border-gray-100 pb-2 md:border-none">
+                        Systems &amp; Data</h4>
+                    <ul class="text-gray-600 space-y-2 font-light text-sm">
                         <li>Data Modeling</li>
                         <li>PostgreSQL</li>
                         <li>Vector Retrieval</li>
@@ -155,55 +220,51 @@
                         <li>Distributed Data Processing</li>
                     </ul>
                 </div>
-
             </div>
-
-
         </section>
 
         <!-- Research & Engineering (Projects) -->
-        <section id="research" class="max-w-7xl mx-auto mb-24">
-            <!-- Header -->
-            <header class="mb-20">
+        <section id="research" class="max-w-7xl mx-auto mb-24 scroll-mt-24">
+            <header class="mb-16 md:mb-20">
                 <div class="w-8 h-[1.5px] bg-black mb-6"></div>
                 <h3 class="text-xs font-semibold tracking-widest uppercase text-gray-400 mb-4">
                     Research &amp; Engineering
                 </h3>
-                <p class="text-gray-500 font-light max-w-2xl leading-relaxed">
+                <p class="text-gray-500 font-light max-w-2xl leading-relaxed text-sm md:text-base">
                     An index of experimental systems, research notebooks, and engineering explorations documenting work
                     in natural language processing, retrieval, and intelligent software.
                 </p>
             </header>
 
             <!-- Research Directory Grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 lg:gap-x-12 gap-y-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-8 lg:gap-x-12">
 
                 <!-- Category 01 -->
                 <article class="group/category">
                     <h4
-                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-6 border-b border-gray-200 pb-4">
+                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-4 md:mb-6 border-b border-gray-200 pb-4">
                         01 · Language Representation
                     </h4>
                     <ul class="space-y-1">
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Embedding
                                         Visualizer</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Prototype</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Prototype</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Interactive 3D visualization of semantic vector spaces using
@@ -220,27 +281,27 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Contextual
                                         Vectors</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Notebook</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Notebook</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Analyzing polysemy and dynamic word representations derived from
@@ -255,27 +316,27 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Contrastive
                                         Maps</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Experiment</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Experiment</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Aligning multilingual semantic spaces through unsupervised contrastive
@@ -290,7 +351,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                     </ul>
                 </article>
@@ -298,28 +359,28 @@
                 <!-- Category 02 -->
                 <article class="group/category">
                     <h4
-                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-6 border-b border-gray-200 pb-4">
+                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-4 md:mb-6 border-b border-gray-200 pb-4">
                         02 · Language Understanding
                     </h4>
                     <ul class="space-y-1">
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">BabyLLM</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Prototype</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Prototype</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 An experimental language learning system exploring conversational
@@ -334,26 +395,26 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">ResumAI</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">System</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">System</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Retrieval-augmented document understanding and semantic chunking for
@@ -368,27 +429,27 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Sentiment
                                         Analysis</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Experiment</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Experiment</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Multilingual text classification and linguistic feature extraction
@@ -403,7 +464,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                     </ul>
                 </article>
@@ -411,28 +472,28 @@
                 <!-- Category 03 -->
                 <article class="group/category">
                     <h4
-                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-6 border-b border-gray-200 pb-4">
+                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-4 md:mb-6 border-b border-gray-200 pb-4">
                         03 · Information Retrieval
                     </h4>
                     <ul class="space-y-1">
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Nyaya</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">System</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">System</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Semantic search and document intelligence system for navigating complex
@@ -448,26 +509,26 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">BM25</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Notebook</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Notebook</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Custom lexical retrieval engine built from standard ranking functions
@@ -482,27 +543,27 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Dense
                                         Retrieval</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Experiment</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Experiment</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Vector-based semantic search exploring embedding similarity metrics and
@@ -517,26 +578,26 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">RAG</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">System</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">System</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 End-to-end retrieval augmented generation pipeline for factual question
@@ -551,7 +612,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                     </ul>
                 </article>
@@ -559,29 +620,29 @@
                 <!-- Category 04 -->
                 <article class="group/category">
                     <h4
-                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-6 border-b border-gray-200 pb-4">
+                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-4 md:mb-6 border-b border-gray-200 pb-4">
                         04 · Foundation Models
                     </h4>
                     <ul class="space-y-1">
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">BPE
                                         Tokenizer</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Notebook</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Notebook</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Subword tokenization algorithm and vocabulary construction implemented
@@ -596,26 +657,26 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Transformer</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Notebook</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Notebook</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 First-principles implementation of attention mechanisms and positional
@@ -630,27 +691,27 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Mini
                                         GPT</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Prototype</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Prototype</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Lightweight autoregressive language model built to understand sequence
@@ -665,27 +726,27 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Token
                                         Optimizer</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Experiment</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Experiment</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Experimental techniques targeting vocabulary efficiency and structural
@@ -701,7 +762,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                     </ul>
                 </article>
@@ -709,29 +770,29 @@
                 <!-- Category 05 -->
                 <article class="group/category">
                     <h4
-                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-6 border-b border-gray-200 pb-4">
+                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-4 md:mb-6 border-b border-gray-200 pb-4">
                         05 · Reasoning Systems
                     </h4>
                     <ul class="space-y-1">
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Knowledge
                                         Graph QA</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Prototype</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Prototype</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Query parsing and path traversal for graph-based question answering
@@ -746,27 +807,27 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Neural-Symbolic
                                         AI</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Experiment</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Experiment</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Experimental framework combining deep neural networks with strict logic
@@ -781,27 +842,27 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">Logic
                                         Engine</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Notebook</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Notebook</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 First-principles implementation of a forward and backward chaining
@@ -816,7 +877,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                     </ul>
                 </article>
@@ -824,28 +885,28 @@
                 <!-- Category 06 -->
                 <article class="group/category">
                     <h4
-                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-6 border-b border-gray-200 pb-4">
+                        class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-4 md:mb-6 border-b border-gray-200 pb-4">
                         06 · Conversational Software
                     </h4>
                     <ul class="space-y-1">
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">FinzFox</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">System</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">System</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Conversational financial intelligence merging structured data with
@@ -861,26 +922,26 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                         <li>
-                            <a href="#"
-                                class="group/card flex flex-col px-5 py-4 -mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300">
+                            <div
+                                class="group/card flex flex-col px-4 md:px-5 py-4 -mx-4 md:-mx-5 rounded-xl border border-transparent hover:bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 cursor-pointer">
                                 <div class="flex items-start justify-between w-full">
                                     <span
                                         class="font-serif text-[17px] leading-tight text-gray-900 transition-colors pr-2">SalesMate</span>
                                     <div class="flex items-center gap-3 shrink-0 pt-0.5">
                                         <span
-                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors">Prototype</span>
+                                            class="text-[8px] uppercase tracking-widest font-semibold px-3 py-1 rounded-xl bg-gray-100/70 text-gray-500 w-24 text-center group-hover/card:bg-gray-100 transition-colors select-none">Prototype</span>
                                         <i
                                             class="fas fa-arrow-right text-[10px] text-gray-300 opacity-0 -translate-x-2 group-hover/card:opacity-100 group-hover/card:translate-x-0 transition-all duration-300 w-2"></i>
                                     </div>
                                 </div>
                                 <div
-                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+                                    class="grid grid-rows-[0fr] group-hover/card:grid-rows-[1fr] grid-expand transition-all duration-300 ease-in-out">
                                     <div class="overflow-hidden">
                                         <div
-                                            class="pt-3 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 delay-75">
+                                            class="pt-3 opacity-0 group-hover/card:opacity-100 opacity-expand transition-opacity duration-300 delay-75">
                                             <p
                                                 class="text-[13px] text-gray-500 font-light leading-relaxed text-justify">
                                                 Interactive analytical tool transforming business data into
@@ -895,7 +956,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </li>
                     </ul>
                 </article>
@@ -903,19 +964,17 @@
             </div>
         </section>
 
-        <!-- The Notebook Section -->
-        <section id="knowledge-hub" class="mb-24 max-w-5xl mx-auto">
-            <!-- Header -->
-            <header class="mb-20">
+        <!-- The Knowledge Hub (Research) -->
+        <section id="knowledge-hub" class="mb-24 max-w-5xl mx-auto scroll-mt-24">
+            <header class="mb-16 md:mb-20">
                 <div class="w-8 h-[1.5px] bg-black mb-6"></div>
                 <h3 class="text-xs font-semibold tracking-widest uppercase text-gray-400 mb-4">Knowledge Hub</h3>
-                <p class="text-gray-500 font-light max-w-2xl leading-relaxed">
+                <p class="text-gray-500 font-light max-w-2xl leading-relaxed text-sm md:text-base">
                     An index of active research logs, developmental roadmaps, and conceptual essays documenting
                     theoretical explorations and practical implementations.
                 </p>
             </header>
 
-            <!-- View Switcher (Logs vs Blogs) -->
             <div class="flex gap-8 border-b border-gray-100 mb-8">
                 <button id="tab-btn-logs" onclick="switchView('logs')"
                     class="pb-4 text-xs font-mono tracking-widest uppercase font-semibold border-b-2 border-black text-black transition-all duration-200">
@@ -927,39 +986,35 @@
                 </button>
             </div>
 
-            <!-- Search and Filter Controls Container -->
-            <div class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-
-                <!-- Filter Tabs (Only shown for Logs view) -->
-                <div id="logs-filter-container" class="flex flex-wrap gap-1">
+            <div class="mb-8 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
+                <div id="logs-filter-container"
+                    class="flex overflow-x-auto no-scrollbar -mx-6 px-6 md:mx-0 md:px-0 gap-1 flex-nowrap md:flex-wrap">
                     <button onclick="setFilter('All')"
-                        class="filter-tab px-3 py-1 text-xs text-black font-semibold border-b-2 border-black transition-all"
+                        class="filter-tab whitespace-nowrap px-3 py-1 text-xs text-black font-semibold border-b-2 border-black transition-all"
                         data-filter="All">All Logs</button>
                     <button onclick="setFilter('Active')"
-                        class="filter-tab px-3 py-1 text-xs text-gray-400 hover:text-black border-b-2 border-transparent transition-all"
+                        class="filter-tab whitespace-nowrap px-3 py-1 text-xs text-gray-400 hover:text-black border-b-2 border-transparent transition-all"
                         data-filter="Active">Active</button>
                     <button onclick="setFilter('Ongoing')"
-                        class="filter-tab px-3 py-1 text-xs text-gray-400 hover:text-black border-b-2 border-transparent transition-all"
+                        class="filter-tab whitespace-nowrap px-3 py-1 text-xs text-gray-400 hover:text-black border-b-2 border-transparent transition-all"
                         data-filter="Ongoing">Ongoing</button>
                     <button onclick="setFilter('Future')"
-                        class="filter-tab px-3 py-1 text-xs text-gray-400 hover:text-black border-b-2 border-transparent transition-all"
+                        class="filter-tab whitespace-nowrap px-3 py-1 text-xs text-gray-400 hover:text-black border-b-2 border-transparent transition-all"
                         data-filter="Future">Future</button>
                     <button onclick="setFilter('Completed')"
-                        class="filter-tab px-3 py-1 text-xs text-gray-400 hover:text-black border-b-2 border-transparent transition-all"
+                        class="filter-tab whitespace-nowrap px-3 py-1 text-xs text-gray-400 hover:text-black border-b-2 border-transparent transition-all"
                         data-filter="Completed">Completed</button>
                 </div>
 
-                <!-- Blog Tags Placeholder (Only shown for Blogs view, starts hidden) -->
                 <div id="blogs-filter-container" class="hidden flex flex-wrap gap-2">
                     <span class="text-xs font-mono text-gray-400 uppercase tracking-wider self-center">Essays &amp; Case
                         Studies</span>
                 </div>
 
-                <!-- Minimal Unified Search Input -->
                 <div class="relative w-full md:w-64">
                     <input type="text" id="search-input" oninput="handleSearch(this.value)"
                         placeholder="Search titles &amp; topics..."
-                        class="w-full text-xs pl-3 pr-8 py-2 border border-gray-200 rounded-sm focus:border-black focus:outline-none transition-all bg-white font-light">
+                        class="w-full text-xs pl-3 pr-8 py-2.5 border border-gray-200 rounded-xl focus:border-black focus:outline-none transition-all bg-white font-light">
                     <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -970,18 +1025,17 @@
                 </div>
             </div>
 
-            <!-- Dynamic Grid Container -->
-            <div id="dynamic-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 fade-transition">
-                <!-- Content will be rendered dynamically here -->
+            <div id="dynamic-grid"
+                class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 transition-all duration-300">
             </div>
         </section>
 
     </main>
 
-    <!-- Footer / Connect -->
+    <!-- Footer (Connect) -->
     <footer class="bg-white border-t border-gray-200 py-12">
         <div class="max-w-4xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm font-medium">
-            <div class="text-gray-500 mb-4 md:mb-0">
+            <div class="text-gray-500 mb-4 md:mb-0 text-center md:text-left">
                 © <span id="year"></span> Samit Fernandes.
             </div>
             <div class="flex gap-6">
@@ -998,7 +1052,60 @@
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // --- Static Data Source: Notebook Logs (Read-only) ---
+        // Mobile Menu Drawer Control
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuBackdrop = document.getElementById('menu-backdrop');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeIcon = document.getElementById('close-icon');
+        let isMenuOpen = false;
+
+        function toggleMenu(forceState) {
+            isMenuOpen = typeof forceState === 'boolean' ? forceState : !isMenuOpen;
+
+            if (isMenuOpen) {
+                // Open menu and fade in the backdrop
+                mobileMenu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
+                menuBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+                menuBackdrop.classList.add('opacity-100', 'pointer-events-auto');
+                hamburgerIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                // Close menu and fade out the backdrop
+                mobileMenu.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+                mobileMenu.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+                menuBackdrop.classList.remove('opacity-100', 'pointer-events-auto');
+                menuBackdrop.classList.add('opacity-0', 'pointer-events-none');
+                hamburgerIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        }
+
+        menuBtn.addEventListener('click', () => toggleMenu());
+
+        // Manage click-to-expand card states for touch/mobile devices
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.group\\/card');
+
+            cards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    // Check if the screen width qualifies as tablet/mobile
+                    if (window.innerWidth < 1024) {
+                        const isActive = card.classList.contains('is-active');
+
+                        // Close any other open card first
+                        cards.forEach(c => c.classList.remove('is-active'));
+
+                        if (!isActive) {
+                            card.classList.add('is-active');
+                        }
+                    }
+                });
+            });
+        });
+
+        // --- Static Data Source: Notebook Logs ---
         const portfolioLogs = [
             {
                 id: "log-1",
@@ -1049,7 +1156,7 @@
             }
         ];
 
-        // --- Static Data Source: Blog Posts (Read-only) ---
+        // --- Static Data Source: Blog Posts ---
         const blogPosts = [
             {
                 id: "blog-1",
@@ -1086,8 +1193,8 @@
         };
 
         // UI states
-        let currentView = "logs"; // 'logs' or 'blogs'
-        let currentFilter = "All"; // Active for Logs view
+        let currentView = "logs";
+        let currentFilter = "All";
         let searchQuery = "";
 
         // Function to switch between Notebook Logs and Blog Posts
@@ -1208,7 +1315,7 @@
                 }
 
                 const card = document.createElement("article");
-                card.className = "p-6 border border-gray-100 rounded-sm bg-white hover:border-gray-900 transition-all duration-300 flex flex-col justify-between";
+                card.className = "p-6 border border-transparent rounded-xl bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 flex flex-col justify-between";
                 card.innerHTML = `
                     <div>
                         <div class="flex items-center justify-between mb-4">
@@ -1247,9 +1354,8 @@
 
             filtered.forEach(post => {
                 const card = document.createElement("article");
-                card.className = "p-6 border border-gray-100 rounded-sm bg-white hover:border-gray-900 transition-all duration-300 flex flex-col justify-between group cursor-pointer";
+                card.className = "p-6 border border-transparent rounded-xl bg-white hover:border-gray-200 hover:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 flex flex-col justify-between group cursor-pointer";
 
-                // Clicking on a blog card can link to standard route if desired
                 card.innerHTML = `
                     <div class="flex flex-col h-full justify-between">
                         <div>
@@ -1283,9 +1389,9 @@
             const tabs = document.querySelectorAll(".filter-tab");
             tabs.forEach(tab => {
                 if (tab.getAttribute("data-filter") === filter) {
-                    tab.className = "filter-tab px-3 py-1 text-xs text-black font-semibold border-b-2 border-black transition-all";
+                    tab.className = "filter-tab whitespace-nowrap px-3 py-1 text-xs text-black font-semibold border-b-2 border-black transition-all";
                 } else {
-                    tab.className = "filter-tab px-3 py-1 text-xs text-gray-400 hover:text-black border-b-2 border-transparent transition-all";
+                    tab.className = "filter-tab whitespace-nowrap px-3 py-1 text-xs text-gray-400 hover:text-black border-b-2 border-transparent transition-all";
                 }
             });
             renderContent();
@@ -1295,12 +1401,10 @@
             searchQuery = val;
             renderContent();
         }
-        
+
         renderContent();
 
     </script>
-
-
 </body>
 
 </html>
